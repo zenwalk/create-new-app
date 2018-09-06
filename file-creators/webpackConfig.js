@@ -1,24 +1,27 @@
 const fs = require('fs')
 const path = require('path')
 
-function webpackConfig(redux) {
-  const placeholder = '@@__PLACEHOLDER_WEBPACK_ALIAS__@@'
+function webpackConfig({ redux, server }) {
+  const aliasPlaceholder = '@@__PLACEHOLDER_WEBPACK_ALIAS__@@'
+  const logPortsPlaceholder = '@@__PLACEHOLDER_WEBPACK_LOG_PORTS__@@'
   const filePath = path.resolve(__dirname, '../files/webpack.config.js')
   const config = fs.readFileSync(filePath, 'utf-8')
   const lines = config.split('\n')
 
-  // Which line # has the placeholder string.
-  const num = lines.findIndex(line => line.includes(placeholder))
+  // Which line #'s' has the placeholders.
+  const aliasLineNum = lines.findIndex(line => line.includes(aliasPlaceholder))
+  const logPortsNum = lines.findIndex(line => line.includes(logPortsPlaceholder))
 
   // The line contents.
-  const line = lines[num]
+  const aliasLine = lines[aliasLineNum]
+  const logPortsLine = lines[logPortsNum]
 
   /*
     https://goo.gl/DirJ71
     Figure out how many empty spaces there are for the indentation.
     Our object properties should be indented 2 more than that.
   */
-  const indent = ' '.repeat(line.search(/\S/) + 2)
+  const indent = ' '.repeat(aliasLine.search(/\S/) + 2)
 
   // Construct the appropriate webpack alias object for redux or not.
   const aliasReduxObject = [
@@ -44,7 +47,18 @@ function webpackConfig(redux) {
     `${indent.slice(2)}},` // Closing bracket indented 2 spaces closer.
   ].filter(Boolean).join('\n')
 
-  return config.replace(placeholder, aliasObject)
+  const devServerLog = [
+    "console.log(`  💻 => Application running in browser at http://localhost:${DEV_SERVER_PORT}",
+    server ? '' : '\\n\\n',
+    '`)',
+  ].join('')
+
+  const consoleLogs = [
+    devServerLog,
+    server && "console.log(`  🌎 => API listening on port ${API_PORT}...\\n\\n`)"
+  ].filter(Boolean).join('\n')
+
+  return config.replace(aliasPlaceholder, aliasObject).replace(logPortsPlaceholder, consoleLogs)
 }
 
 module.exports = webpackConfig
