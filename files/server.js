@@ -45,4 +45,4 @@ app.use(
 app.get('*', require('./api/home'))
 
 // And so it begins...
-app.listen(API_PORT)
+app.listen(API_PORT, () => `API listening on port ${API_PORT}...`)
