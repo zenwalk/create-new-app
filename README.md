@@ -66,6 +66,7 @@ Sometimes you simply want a quick sandbox project to test something real quick. 
 
 ```shell
 cna <app-name> --sandbox
+cna <app-name> --s
 ```
 
 This will generate 3 files for you, tied together in `index.html`:
@@ -74,6 +75,15 @@ This will generate 3 files for you, tied together in `index.html`:
 3. styles.css
 
 Simple, no? Let's look at some other examples...
+
+
+### Vanilla Project
+
+Don't need React? A vanilla project comes with the same Webpack build and options (SCSS, ES6+, etc.) but doesn't have any of the React toys. If you're bundling for the browser *and* npm (universal module), there's a simple Webpack switch you can flip. Vanilla JavaScript for the win!
+
+```shell
+cna <app-name> --vanilla
+```
 
 
 ## Other Examples
@@ -348,6 +358,18 @@ When you need a back end for your app, you need an API server. The purpose of an
       </td>
       <td><code>false</code></td>
     </tr>
+    <tr>
+      <td><code>--vanilla</code></td>
+      <td>-</td>
+      <td>Boolean</td>
+      <td>
+        When you want an app with a build process but don't need React & friends.
+        <br><br>
+        <em>Examples:</em>
+        <br><code>--vanilla</code>
+      </td>
+      <td><code>false</code></td>
+    </tr>
   </tbody>
 </table>
 
@@ -356,6 +378,7 @@ When you need a back end for your app, you need an API server. The purpose of an
 
 - [x] Include Redux as an option ~~(or default?)~~
 - [x] Include ~~`redux-first-router`~~ React Router as an option
+- [x] Include an option for vanilla JS projects
 - [ ] Implement PWA's by default with CLI option to disable
 - [ ] Implement ~~Jest~~ [Cypress](https://www.cypress.io/) along with a test for the generated components
 - [ ] Create `man` documentation for use in `package.json` - https://goo.gl/64HeiV
