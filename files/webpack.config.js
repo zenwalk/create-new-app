@@ -163,7 +163,7 @@ module.exports = (env, argv) => ({
                 [
                   '@babel/preset-env', // https://goo.gl/aAxYAq
                   {
-                    targets: {
+                    targets: { // https://goo.gl/w7nUks
                       browsers: [
                         // https://goo.gl/2uAdKL - avoid `last 2 versions`.
                         '>0.25%',

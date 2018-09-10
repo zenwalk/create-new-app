@@ -110,6 +110,7 @@ const optionDefinitions = [
   { name: 'offline', alias: 'o', type: Boolean, defaultValue: false },
   { name: 'force', alias: 'f', type: Boolean, defaultValue: false }, // Use with caution.
   { name: 'sandbox', alias: 's', type: Boolean, defaultValue: false },
+  { name: 'vanilla', type: Boolean, defaultValue: false},
 
   // `package.json` fields.
   { name: 'author', type: String, defaultValue: '' },
@@ -268,6 +269,7 @@ function processUsersCommand(options) {
     mongo,
     devServerPort,
     sandbox,
+    vanilla,
     api
   } = options
 
@@ -310,7 +312,7 @@ function createProjectDirectory(options) {
 
 // STEP 4
 function createFiles(options) {
-  const { appDir, server, mongo, express, redux, router } = options
+  const { appDir, server, mongo, express, redux, router, vanilla } = options
   const filter1 = { filter: file => !file.endsWith('.DS_Store') }
 
   // `.env`
@@ -332,7 +334,7 @@ function createFiles(options) {
   server && fs.copySync(dir(`files/server${mongo ? '-mongo' : ''}.js`), `${appDir}/server.js`)
 
   // `webpack.config.js`
-  fs.writeFileSync(`${appDir}/webpack.config.js`, webpackConfig(redux || router), 'utf-8')
+  fs.writeFileSync(`${appDir}/webpack.config.js`, webpackConfig({ redux, server }), 'utf-8')
 
   // `api` directory tree.
   mongo && fs.copySync(dir('./files/api'), `${appDir}/api`, filter1)
